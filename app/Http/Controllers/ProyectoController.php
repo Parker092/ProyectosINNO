@@ -4,13 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
-
+use PDF;
 /**
  * Class ProyectoController
  * @package App\Http\Controllers
  */
 class ProyectoController extends Controller
 {
+
+    public function getPDF()
+    {
+        $proyectos = Proyecto::paginate();
+        $pdf = PDF::loadView('proyecto.pdf', compact('proyectos'));
+        return $pdf->download('REPORTE.pdf');
+        
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +30,15 @@ class ProyectoController extends Controller
         $proyectos = Proyecto::paginate();
 
         return view('proyecto.index', compact('proyectos'))
+            ->with('i', (request()->input('page', 1) - 1) * $proyectos->perPage());
+    }
+
+    // PDF 
+    public function pdf()
+    {
+        $proyectos = Proyecto::paginate();
+
+        return view('proyecto.pdf', compact('proyectos'))
             ->with('i', (request()->input('page', 1) - 1) * $proyectos->perPage());
     }
 

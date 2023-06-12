@@ -18,5 +18,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
 Route::resource('proyectos', App\Http\Controllers\ProyectoController::class)->middleware('auth');
+
+Route::get('/pdf', [App\Http\Controllers\ProyectoController::class, 'getPDF'])->name('proyecto.pdf');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
